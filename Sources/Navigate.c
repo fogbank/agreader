@@ -499,7 +499,11 @@ int Navigate(char* Guide, AGLink link)
             /* The command string is normally designed to be executed on **
             ** an Amiga system, but as path and command differ notably,  **
             ** it would quite impossible to translate it into a Unix env */
+
+/* please, dom't execute arbitrary commands just like that... */
+#if 0
             myExecute(link->node, NULL);
+#endif
             break;
         case DYNAMIC_FILE: {
             AGFile new;
