@@ -128,6 +128,8 @@ char* FindAGLinkInfo(AGLink link, char* format)
         case UNKNOWN_TYPE:
             /* Forget to set the type? */
             link->type = LINK_TO_DOC;
+			goto CASE_LINK_TO_DOC; /* yes, I do want to fall through */
+CASE_LINK_TO_DOC:
         case LINK_TO_DOC: { /* If it's a link to a node, check if it remains in the same file */
             register char* q = p - 1;
             if (*p == eos)
