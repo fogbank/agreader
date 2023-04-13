@@ -29,7 +29,7 @@ AGFile CreateTextNodes(char* filename)
             if (filename == NULL)
                 return new;
             { /* Quickly counts the number of lines */
-                register char* p = new->Buffer;
+                const char* p = new->Buffer;
                 for (; *p; p++)
                     if (*p == '\n')
                         new->NbNodes++;
