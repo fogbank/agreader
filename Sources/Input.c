@@ -87,26 +87,25 @@ void SetTopLine(AGNode node)
 void ThrowError(char* msg, char* param)
 {
     char *d, *s;
-    int i; /* silence warnings */
 
     /* Frequently error message encountered */
     if (msg == ERROR_NO_FREE_STORE)
         msg = "Not enough memory!";
 
     /* Can do better, I know */
-    for (d = TmpBuf, s = msg; *s && d - TmpBuf < sizeof(TmpBuf); *d++ = *s++)
+    for (d = TmpBuf, s = msg; *s && d - TmpBuf < (long)sizeof(TmpBuf); *d++ = *s++)
         if (*s == '%' && s[1] == 's' && param)
             msg = s + 2, s = param, param = (char*)1;
 
     if (param == (char*)1)
-        for (s = msg; *s && d - TmpBuf < sizeof(TmpBuf); *d++ = *s++)
+        for (s = msg; *s && d - TmpBuf < (long)sizeof(TmpBuf); *d++ = *s++)
             ;
 
     /* If GUI isn't already set, display on stderr */
     if (is_rawmode())
         *d = '\0', Prompt(TmpBuf);
     else /* fputs doesn't write any \n */
-        *d++ = '\n', i = write(2, TmpBuf, d - TmpBuf);
+        *d++ = '\n', write(2, TmpBuf, d - TmpBuf);
 }
 
 /*** Toggle display between node and information ***/
@@ -409,7 +408,7 @@ void ProcessKeys(void)
             }
         }
         /* Cancel command, if too long */
-        if (p - buffer > sizeof(buffer) - 2)
+        if (p - buffer > (long)sizeof(buffer) - 2)
             p = buffer;
     }
 exit_for:
