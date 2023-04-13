@@ -43,7 +43,6 @@ void raw_mode(int on)
 {
     static struct termios save_term;
     struct termios s;
-    int i; /* silence warnings */
 
     /* Do not set twice the same mode!! */
     if (old_st == on)
@@ -123,12 +122,12 @@ void raw_mode(int on)
         s.c_cc[VTIME] = 0;
 
         /* let's enter in private mode */
-        i = write(1, SET_PRIV, sizeof(SET_PRIV) - 1);
+        write(1, SET_PRIV, sizeof(SET_PRIV) - 1);
     } else {
         /* Restore saved modes */
         s = save_term;
         /* and old display mode */
-        i = write(1, SET_PUB, sizeof(SET_PUB) - 1);
+        write(1, SET_PUB, sizeof(SET_PUB) - 1);
     }
     tcsetattr(2, TCSADRAIN, &s);
 }
