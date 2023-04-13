@@ -7,6 +7,7 @@ void FreeMem(void* mem);
 
 #define free(X) FreeMem(X)
 #define malloc(X) AllocMem(X)
-#endif // DEBUG_MEM
 
-#endif // AGLIB_H
+#endif /* DEBUG_MEM */
+
+#endif /* AGLIB_H */
