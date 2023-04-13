@@ -35,6 +35,9 @@ void quit(char* msg, int status)
 void sig_winch(int type)
 {
     struct scrpos old = terminfo;
+
+    (void)type; /* silence the unused param warning */
+
     get_termsize(&terminfo.width);
     set_scroll_region(terminfo.height - 1);
     if (old.height != terminfo.height || old.width != terminfo.width) {
@@ -49,6 +52,7 @@ void sig_winch(int type)
 /*** Program interrupted ***/
 void sig_int(int type)
 {
+    (void)type; /* silence the unused param warning */
     /* Some cleanup should be done before */
     if (is_rawmode())
         set_scroll_region(terminfo.height);

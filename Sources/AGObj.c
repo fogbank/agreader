@@ -169,6 +169,8 @@ void RstPara(AGObj obj, ObjPara* op)
 /*** Turn of word-wrapping while formatting paragraph ***/
 void WrapOFF(AGObj obj, ObjPara* op)
 {
+    (void)obj; /* silence the unused param warning */
+
     op->limit = 0;
 }
 
@@ -176,11 +178,18 @@ void WrapOFF(AGObj obj, ObjPara* op)
 void InitTabs(AGObj obj, ObjPara* op)
 {
     extern short* tabs;
+
+    (void)op; /* silence the unused param warning */
+
     tabs = TABSTOP(obj);
 }
 void ClearTabs(AGObj obj, ObjPara* op)
 {
     extern short* tabs;
+
+    (void)obj; /* silence the unused param warning */
+    (void)op; /* silence the unused param warning */
+
     tabs = NULL;
 }
 
