@@ -500,7 +500,7 @@ int Navigate(char* Guide, AGLink link)
             ** an Amiga system, but as path and command differ notably,  **
             ** it would quite impossible to translate it into a Unix env */
 
-/* please, dom't execute arbitrary commands just like that... */
+/* please, don't execute arbitrary commands just like that... */
 #if 0
             myExecute(link->node, NULL);
 #endif

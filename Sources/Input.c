@@ -178,8 +178,10 @@ void ProcessKeys(void)
         "[1~", "[4~", "OH", "OF", /* 2x Alternative End, Home */
         "[11~", "[12~", "[13~", /* F1, F2, F3 */
         "OP", "OQ", "OR", /* Alternative F1, F2, F3 */
-        "[[A", "[[B", "[[C", NULL /* Linux console F1, F2, F3 */
-    };
+        "[[A", "[[B", "[[C", /* Linux console F1, F2, F3 */
+        "[Z", /* backtab */
+        NULL
+	};
     static char* StrNode[] = {
         "help", "index", "table of content"
     };
@@ -271,6 +273,9 @@ void ProcessKeys(void)
                             goto singleton;
                         case 20:
                             p[-1] = '3';
+                            goto singleton;
+						case 21: /* backtab */
+                            FindNextLink(&terminfo, -1);
                             goto singleton;
                     }
                     p = buffer;
