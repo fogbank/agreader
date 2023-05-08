@@ -54,6 +54,7 @@ AGWord CreateAGLink(char* format)
         else if (!strncasecmp(p, LinkTokens[1], strlen(LinkTokens[1])))
             new->link->type = SYSTEM_COMMAND;
         else
+			new->link->type = UNKNOWN_TYPE;
             new->link->node = p;
 
         /* Makes them appear like web-page anchor */
