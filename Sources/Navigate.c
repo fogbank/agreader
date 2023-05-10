@@ -18,7 +18,7 @@
 
 extern char buffer[512];
 extern short* tabs;
-char command[] = "xv %s"; /* Command executed for viewing picture */
+char command[] = "see %s"; /* Command executed for viewing picture */
 
 /** Manage history of visited pages **/
 static Stack stack = NULL, first = NULL;
