@@ -14,7 +14,6 @@
 #include <signal.h>
 
 int tty; /* tty used to display all things */
-int is_tty; /* 1 if file is being read from a pipe */
 char underlined = 1; /* 1 if terminal support underlined mode */
 
 /** This sequence is to get a private mode in a xterm & co ***

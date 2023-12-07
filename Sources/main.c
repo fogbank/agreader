@@ -66,44 +66,42 @@ void sig_int(int type)
 int main(int argc, char* argv[])
 {
     struct _AGLink link;
-    extern int is_tty;
 
-    /* Checks arguments */
-    if ((is_tty = isatty(STDIN_FILENO)) && argc != 2) {
+    if (!isatty(STDIN_FILENO)) {
+        printf("Reading through pipes is not yet supported, sorry.\n");
+        quit(NULL, EXIT_FAILURE);
+    } else if (argc != 2) {
         printf("\033[1musage:\033[0m %s File.guide\n"
                "Navigate through an AmigaGuide file on default tty\n",
             *argv);
         quit(NULL, EXIT_FAILURE);
+    } else {
+        /* Set parameters describing the file. Because file-type **
+        ** can't be known for now, let Navigate() determines it. */
+        link.node = "MAIN";
+        link.file = argv[1];
+        link.line = 0;
+        link.type = LINK_TO_DOC;
+        get_termsize(&terminfo.width);
+
+        if (Navigate("", &link)) {
+            /* Waits the last moment for changing terminal attributes, thus **
+            ** starting error messages can still be displayed on stderr.    */
+            raw_mode(1);
+            init_signals(1, sig_int, sig_winch);
+            open_getchr();
+
+            /* Process user input */
+            ReRenderAGNode();
+            ProcessKeys();
+            /* Reset standard scrolling region */
+            set_scroll_region(terminfo.height);
+            quit(NULL, EXIT_SUCCESS);
+        } else {
+            /* Errors will be displayed in Navigate() */
+            quit(NULL, EXIT_FAILURE);
+        }
     }
-    if (!is_tty) {
-        printf("Reading through pipes is not yet supported, sorry.\n");
-        quit(NULL, EXIT_FAILURE);
-    }
-
-    /* Set parameters describing the file. Because file-type **
-    ** can't be known for now, let Navigate() determines it. */
-    link.node = "MAIN";
-    link.file = argc == 2 ? argv[1] : NULL;
-    link.line = 0;
-    link.type = is_tty ? LINK_TO_DOC : DYNAMIC_FILE;
-    get_termsize(&terminfo.width);
-
-    if (Navigate("", &link)) {
-        /* Waits the last moment for changing terminal attributes, thus **
-        ** starting error messages can still be displayed on stderr.    */
-        raw_mode(1);
-        init_signals(1, sig_int, sig_winch);
-        open_getchr();
-
-        /* Process user input */
-        ReRenderAGNode();
-        ProcessKeys();
-        /* Reset standard scrolling region */
-        set_scroll_region(terminfo.height);
-        quit(NULL, EXIT_SUCCESS);
-    } else
-        /* Errors will be displayed in Navigate() */
-        quit(NULL, EXIT_FAILURE);
 
     return 0;
 }
