@@ -9,9 +9,6 @@ void raw_mode(int);
 /** Test whether raw mode is on **/
 char is_rawmode(void);
 
-/** Open raw modes for getting character from keyboard **/
-void open_getchr(void);
-
 /** Get a character from standard input (keyboard) **/
 char getchr(void);
 

@@ -29,8 +29,10 @@ void quit(char* msg, int status)
             nb_alloc, mem_alloc, nb_free);
     }
 #endif
-    if (msg)
+    if (msg) {
         fputs(msg, stderr);
+    }
+
     exit(status);
 }
 
@@ -73,7 +75,7 @@ int main(int argc, char* argv[])
     } else if (argc != 2) {
         printf("\033[1musage:\033[0m %s File.guide\n"
                "Navigate through an AmigaGuide file on default tty\n",
-            *argv);
+            argv[0]);
         quit(NULL, EXIT_FAILURE);
     } else {
         /* Set parameters describing the file. Because file-type **
@@ -89,7 +91,6 @@ int main(int argc, char* argv[])
             ** starting error messages can still be displayed on stderr.    */
             raw_mode(1);
             init_signals(1, sig_int, sig_winch);
-            open_getchr();
 
             /* Process user input */
             ReRenderAGNode();
