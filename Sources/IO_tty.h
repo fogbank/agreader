@@ -25,7 +25,4 @@ void set_cursor_pos(short y, short x);
 typedef void (*sighandler_t)(int);
 void init_signals(int on, sighandler_t sig_int, sighandler_t sig_winch);
 
-/** Simple integer to string conversion **/
-char* my_itoa(char*, short);
-
 #endif
