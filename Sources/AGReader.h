@@ -50,9 +50,6 @@ typedef struct _AGBuf {
     char Stream[BUF_PIPE_SIZE];
 }* AGBuf;
 
-#define QUIT_OK 0
-#define QUIT_ERROR 1
-
 void quit(char* msg, int status);
 
 #endif

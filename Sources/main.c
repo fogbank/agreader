@@ -12,6 +12,9 @@
 #include "Input.h"
 #include "Navig.h"
 
+#include <stdlib.h>
+#include <unistd.h>
+
 struct scrpos terminfo; /* Information about visited node & screen */
 
 /*** Exit the program ***/
@@ -56,7 +59,7 @@ void sig_int(int type)
     /* Some cleanup should be done before */
     if (is_rawmode())
         set_scroll_region(terminfo.height);
-    quit("*** User abort\n", QUIT_OK);
+    quit("*** User abort\n", EXIT_SUCCESS);
 }
 
 /*** MAIN LOOP ***/
@@ -66,15 +69,15 @@ int main(int argc, char* argv[])
     extern int is_tty;
 
     /* Checks arguments */
-    if ((is_tty = isatty(0)) && argc != 2) {
+    if ((is_tty = isatty(STDIN_FILENO)) && argc != 2) {
         printf("\033[1musage:\033[0m %s File.guide\n"
                "Navigate through an AmigaGuide file on default tty\n",
             *argv);
-        quit(NULL, QUIT_ERROR);
+        quit(NULL, EXIT_FAILURE);
     }
-    if (is_tty == 0) {
+    if (!is_tty) {
         printf("Reading through pipes is not yet supported, sorry.\n");
-        quit(NULL, QUIT_ERROR);
+        quit(NULL, EXIT_FAILURE);
     }
 
     /* Set parameters describing the file. Because file-type **
@@ -97,10 +100,10 @@ int main(int argc, char* argv[])
         ProcessKeys();
         /* Reset standard scrolling region */
         set_scroll_region(terminfo.height);
-        quit(NULL, QUIT_OK);
+        quit(NULL, EXIT_SUCCESS);
     } else
         /* Errors will be displayed in Navigate() */
-        quit(NULL, QUIT_ERROR);
+        quit(NULL, EXIT_FAILURE);
 
     return 0;
 }

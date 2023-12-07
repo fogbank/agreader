@@ -9,7 +9,9 @@
 #include "AGNodes.h"
 #include "AGReader.h"
 #include "AG_lib.h"
+
 #include <ctype.h>
+#include <stdlib.h>
 #include <string.h>
 
 char* LinkTokens[] = {
@@ -64,7 +66,7 @@ AGWord CreateAGLink(char* format)
         if (new->link->type != UNKNOWN_TYPE)
             FindAGLinkInfo(new->link, p + strlen(LinkTokens[new->link->type - 1]));
     } else
-        quit(MemErr, QUIT_ERROR);
+        quit(MemErr, EXIT_FAILURE);
     return new;
 }
 
@@ -104,7 +106,7 @@ AGWord NewWord(AGPara par, AGWord old, char* data, AGContext* agc)
         if (agc)
             memcpy(&new->fgpen, &agc->fgpen, 3);
     } else
-        quit(MemErr, QUIT_ERROR);
+        quit(MemErr, EXIT_FAILURE);
     return new;
 }
 
@@ -126,7 +128,7 @@ AGWord NewSplitWord(AGPara par, AGWord cut, char* split)
         memcpy(&new->w.fgpen, &cut->fgpen, 3);
         new->w.style |= FSF_SPLITTED;
     } else
-        quit(MemErr, QUIT_ERROR);
+        quit(MemErr, EXIT_FAILURE);
     return (AGWord) new;
 }
 
@@ -150,7 +152,7 @@ AGPara NewPara(AGPara ins, AGContext* agc)
             new->ts = agc->ts;
         InsertAGWord(NULL, (AGWord) new, (AGWord)ins);
     } else
-        quit(MemErr, QUIT_ERROR);
+        quit(MemErr, EXIT_FAILURE);
     return new;
 }
 
@@ -205,7 +207,7 @@ AGWord NewObject(AGPara par, AGWord old, AGInit pfnInit, size_t mem)
         new->func = pfnInit;
 
     } else
-        quit(MemErr, QUIT_ERROR);
+        quit(MemErr, EXIT_FAILURE);
     return (AGWord) new;
 }
 
