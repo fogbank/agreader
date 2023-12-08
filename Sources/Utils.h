@@ -1,7 +1,10 @@
-#ifndef AGLIB_H
-#define AGLIB_H
+#ifndef UTILS_H
+#define UTILS_H
 
 #ifdef DEBUG_MEM /* Track memory deallocation */
+
+#include <stdlib.h>
+
 void* AllocMem(size_t size);
 void FreeMem(void* mem);
 
@@ -10,4 +13,6 @@ void FreeMem(void* mem);
 
 #endif /* DEBUG_MEM */
 
-#endif /* AGLIB_H */
+void quit(char* msg, int status);
+
+#endif

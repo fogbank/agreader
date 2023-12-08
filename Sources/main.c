@@ -11,30 +11,12 @@
 #include "IO_tty.h"
 #include "Input.h"
 #include "Navig.h"
+#include "Utils.h"
 
 #include <stdlib.h>
 #include <unistd.h>
 
 struct scrpos terminfo; /* Information about visited node & screen */
-
-/*** Exit the program ***/
-void quit(char* msg, int status)
-{
-    raw_mode(0);
-    PopAGNodes();
-#ifdef DEBUG_MEM
-    {
-        extern long nb_alloc, nb_free, mem_alloc;
-        printf("Mem usage: %ld alloc (%ld bytes), %ld free\n",
-            nb_alloc, mem_alloc, nb_free);
-    }
-#endif
-    if (msg) {
-        fputs(msg, stderr);
-    }
-
-    exit(status);
-}
 
 /*** Handler called when window size changed ***/
 void sig_winch(int type)
@@ -59,8 +41,9 @@ void sig_int(int type)
 {
     (void)type; /* silence the unused param warning */
     /* Some cleanup should be done before */
-    if (is_rawmode())
+    if (get_mode() == MODE_RAW) {
         set_scroll_region(terminfo.height);
+    }
     quit("*** User abort\n", EXIT_SUCCESS);
 }
 
@@ -89,7 +72,7 @@ int main(int argc, char* argv[])
         if (Navigate("", &link)) {
             /* Waits the last moment for changing terminal attributes, thus **
             ** starting error messages can still be displayed on stderr.    */
-            raw_mode(1);
+            set_mode(MODE_RAW);
             init_signals(1, sig_int, sig_winch);
 
             /* Process user input */

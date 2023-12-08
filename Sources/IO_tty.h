@@ -3,11 +3,16 @@
 #ifndef IO_TTY_H
 #define IO_TTY_H
 
-/** Switch between normal (0) or raw (1) mode **/
-void raw_mode(int);
+enum Term_mode {
+    MODE_CANONICAL,
+    MODE_RAW
+};
 
-/** Test whether raw mode is on **/
-char is_rawmode(void);
+/** Switch between normal or raw mode **/
+void set_mode(int);
+
+/** Get current terminal mode **/
+int get_mode(void);
 
 /** Get a character from standard input (keyboard) **/
 char getchr(void);

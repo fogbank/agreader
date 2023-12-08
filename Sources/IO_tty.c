@@ -4,14 +4,13 @@
 *****           but greatly simplified by T.Pierron          ****
 ****************************************************************/
 
+#include "IO_tty.h"
+#include "AGReader.h"
+#include <signal.h>
 #include <strings.h>
 #include <sys/ioctl.h>
 #include <sys/time.h>
 #include <termios.h>
-
-#include "AGReader.h"
-#include "IO_tty.h"
-#include <signal.h>
 #include <unistd.h>
 
 char underlined = 1; /* 1 if terminal support underlined mode */
@@ -26,8 +25,6 @@ char SET_PUB[] = "\033[2J" /* Clears screen */
                  "\033[?1;47l" /* Reset AppCuKeys (1) and private (47) mode */
                  "\0338"; /* Restore cursor position */
 
-/** Current state mode (0:normal, 1:private) **/
-static int old_st = 0;
 
 /* Change terminal to "raw mode", or restore to "normal" mode. This means:
  *	1. An outstanding read will complete on receipt of a single keystroke.
@@ -38,21 +35,20 @@ static int old_st = 0;
  *	   etc. are NOT disabled.
  * It doesn't matter whether an input \n is mapped to \r, or vice versa.
  */
-void raw_mode(int on)
+void set_mode(int mode)
 {
     static struct termios save_term;
     struct termios s;
+    int cur_mode = get_mode();
 
     /* Do not set twice the same mode!! */
-    if (old_st == on) {
+    if (cur_mode == mode) {
         return;
-    } else {
-        old_st = on;
     }
 
-    if (on) {
+    if (mode == MODE_RAW) {
         /* Get terminal modes */
-        tcgetattr(STDOUT_FILENO, &s);
+        tcgetattr(STDIN_FILENO, &s);
 
         /* Save modes and set certain variables dependent on modes */
         save_term = s;
@@ -131,13 +127,17 @@ void raw_mode(int on)
         /* and old display mode */
         write(STDOUT_FILENO, SET_PUB, sizeof(SET_PUB) - 1);
     }
-    tcsetattr(STDOUT_FILENO, TCSADRAIN, &s);
+
+    tcsetattr(STDIN_FILENO, TCSADRAIN, &s);
 }
 
 /*** Test whether raw mode is on ***/
-char is_rawmode(void)
+int get_mode(void)
 {
-    return (old_st == 1);
+    struct termios s;
+    tcgetattr(STDIN_FILENO, &s);
+
+    return s.c_lflag & ICANON ? MODE_CANONICAL : MODE_RAW;
 }
 
 char getchr(void)

@@ -8,7 +8,6 @@
 #include "AGNodes.h"
 #include "AGObj.h"
 #include "AGReader.h"
-#include "AG_lib.h"
 #include "IO_tty.h"
 #include "Input.h"
 #include "Navig.h"
@@ -445,7 +444,7 @@ int Navigate(char* Guide, AGLink link)
                             PushAGNode(terminfo.file,
                                 terminfo.node, 0);
                         }
-                        if (is_rawmode())
+                        if (get_mode() == MODE_RAW)
                             ReRenderAGNode();
                     } else
                         ThrowError("Can't find node `%s'.", link->node);
@@ -469,7 +468,7 @@ int Navigate(char* Guide, AGLink link)
                             PushAGNode(new, node, 1);
                             SetNodeFile(&terminfo, node, new);
                             FindNth(node, link->line, &terminfo);
-                            if (is_rawmode())
+                            if (get_mode() == MODE_RAW)
                                 ReRenderAGNode();
                             return 1;
 

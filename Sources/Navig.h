@@ -3,6 +3,9 @@
 #ifndef NAVIG_H
 #define NAVIG_H
 
+#include "AGNodes.h"
+#include "AGReader.h"
+
 /** Environment variable that may contain a alternate path for AmigaDOS named device **/
 #define AGR_PATH_ENV_NAME "AGR_PATH"
 

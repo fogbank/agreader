@@ -102,7 +102,7 @@ void ThrowError(char* msg, char* param)
             ;
 
     /* If GUI isn't already set, display on stderr */
-    if (is_rawmode())
+    if (get_mode() == MODE_RAW)
         *d = '\0', Prompt(TmpBuf);
     else /* fputs doesn't write any \n */
         *d++ = '\n', write(2, TmpBuf, d - TmpBuf);

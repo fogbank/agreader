@@ -6,7 +6,7 @@ EXE=agr
 CFLAGS=-std=c89 -Wall -Wextra -D_DEFAULT_SOURCE #-DNO_STR_HELP
 INCDIR=
 LIBS=
-OBJECTS=main.o IO_tty.o AG_lib.o AGObj.o Input.o Navigate.o Text.o
+OBJECTS=main.o IO_tty.o AG_lib.o AGObj.o Input.o Navigate.o Text.o Utils.o
 
 all: final
 

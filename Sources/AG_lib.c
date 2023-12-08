@@ -11,7 +11,10 @@
 #include "IO_tty.h"
 #include "Input.h"
 #include "Version.h"
+#include "Utils.h"
 #include <ctype.h>
+#include <stddef.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
 
@@ -39,25 +42,6 @@ char* CommandTokens[] = {
 };
 
 #define AG_COMMAND 1 /* Marker for known AG commands */
-
-#ifdef DEBUG_MEM
-#undef free
-#undef malloc
-long nb_alloc = 0, nb_free = 0, mem_alloc = 0;
-void* AllocMem(size_t size)
-{
-    mem_alloc += size;
-    nb_alloc++;
-    return malloc(size);
-}
-void FreeMem(void* mem)
-{
-    nb_free++;
-    free(mem);
-}
-#define free(X) FreeMem(X)
-#define malloc(X) AllocMem(X)
-#endif
 
 /*** Get a string from the buffer ***/
 char* GetAGString(char** dst, char* src, char eos)
