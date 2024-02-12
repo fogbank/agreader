@@ -49,73 +49,9 @@ void set_mode(int mode)
     if (mode == MODE_RAW) {
         /* Get terminal modes */
         tcgetattr(STDIN_FILENO, &s);
-
-        /* Save modes and set certain variables dependent on modes */
         save_term = s;
 
-        /* Set the modes to the way we want them */
-        s.c_lflag &= ~(0
-#ifdef ICANON
-            | ICANON
-#endif
-#ifdef ECHO
-            | ECHO
-#endif
-#ifdef ECHOE
-            | ECHOE
-#endif
-#ifdef ECHOK
-            | ECHOK
-#endif
-#if ECHONL
-            | ECHONL
-#endif
-        );
-
-        s.c_oflag |= (0
-#ifdef XTABS
-            | XTABS
-#else
-#ifdef TAB3
-            | TAB3
-#else
-#ifdef OXTABS
-            | OXTABS
-#endif
-#endif
-#endif
-#ifdef OPOST
-            | OPOST
-#endif
-#ifdef ONLCR
-            | ONLCR
-#endif
-        );
-
-        s.c_oflag &= ~(0
-#ifdef ONOEOT
-            | ONOEOT
-#endif
-#ifdef OCRNL
-            | OCRNL
-#endif
-#ifdef ONOCR
-            | ONOCR
-#endif
-#ifdef ONLRET
-            | ONLRET
-#endif
-        );
-
-        /* Get some feature of host terminal */
-        {
-            char* env;
-            if ((env = getenv("TERM")) != NULL && !strcasecmp(env, "linux"))
-                /* Unfortunately linux console disabled all previous defined **
-                ** styles in an ANSI sequence that contains underlining mode */
-                underlined = 0;
-        }
-
+        cfmakeraw(&s);
         s.c_cc[VMIN] = 1;
         s.c_cc[VTIME] = 0;
 
